@@ -1,0 +1,98 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# -----------------------------------------
+# 📊 STEP 1: Create sample sales dataset
+# -----------------------------------------
+months = np.array([
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+])
+products = np.array(['Laptop', 'Mouse', 'Keyboard', 'Monitor', 'Headphones'])
+
+np.random.seed(42)
+quantity_sold = np.random.randint(20, 200, size=(12, 5))
+prices = np.array([60000, 800, 1500, 12000, 2500])
+
+# -----------------------------------------
+# 💰 STEP 2: Calculate Revenue
+# -----------------------------------------
+monthly_revenue = quantity_sold * prices
+total_monthly_revenue = np.sum(monthly_revenue, axis=1)
+total_product_revenue = np.sum(monthly_revenue, axis=0)
+
+# -----------------------------------------
+# 📈 STEP 3: Analysis
+# -----------------------------------------
+total_yearly_revenue = np.sum(total_monthly_revenue)
+avg_monthly_revenue = np.mean(total_monthly_revenue)
+best_month_index = np.argmax(total_monthly_revenue)
+worst_month_index = np.argmin(total_monthly_revenue)
+best_product_index = np.argmax(total_product_revenue)
+worst_product_index = np.argmin(total_product_revenue)
+above_avg_months = months[total_monthly_revenue > avg_monthly_revenue]
+growth = ((total_monthly_revenue[-1] - total_monthly_revenue[0]) / total_monthly_revenue[0]) * 100
+
+# -----------------------------------------
+# 🧮 STEP 4: Display Results (Summary)
+# -----------------------------------------
+print("========== SALES ANALYSIS REPORT ==========\n")
+print(f" Total Yearly Revenue: ₹{total_yearly_revenue:,.2f}")
+print(f" Average Monthly Revenue: ₹{avg_monthly_revenue:,.2f}")
+print(f" Best Month: {months[best_month_index]} (₹{total_monthly_revenue[best_month_index]:,.2f})")
+print(f" Worst Month: {months[worst_month_index]} (₹{total_monthly_revenue[worst_month_index]:,.2f})")
+print(f" Best Product: {products[best_product_index]}")
+print(f" Least Product: {products[worst_product_index]}")
+print("\nMonths with above-average sales:", ', '.join(above_avg_months))
+print(f"\n Growth from Jan to Dec: {growth:.2f}%")
+print("\n========== END OF REPORT ==========")
+
+# -----------------------------------------
+# 🎨 STEP 5: Visualization using Matplotlib
+# -----------------------------------------
+
+plt.style.use('seaborn-v0_8-muted')
+
+# 1️⃣ Monthly Total Revenue (Bar Chart)
+plt.figure(figsize=(10,5))
+plt.bar(months, total_monthly_revenue, color='royalblue')
+plt.title("Monthly Total Revenue (₹)", fontsize=14, weight='bold')
+plt.xlabel("Months")
+plt.ylabel("Revenue (₹)")
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+
+# 2️⃣ Product-wise Yearly Revenue (Bar Chart)
+plt.figure(figsize=(8,5))
+plt.bar(products, total_product_revenue, color='mediumseagreen')
+plt.title("Product-wise Yearly Revenue (₹)", fontsize=14, weight='bold')
+plt.xlabel("Products")
+plt.ylabel("Revenue (₹)")
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+
+# 3️⃣ Monthly Revenue Trend (Line Chart)
+plt.figure(figsize=(10,5))
+plt.plot(months, total_monthly_revenue, marker='o', color='orange', linewidth=2)
+plt.title("Monthly Revenue Trend", fontsize=14, weight='bold')
+plt.xlabel("Months")
+plt.ylabel("Revenue (₹)")
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.tight_layout()
+plt.show()
+
+# 4️⃣ Highlight Best & Worst Month
+colors = ['lightgray'] * 12
+colors[best_month_index] = 'green'
+colors[worst_month_index] = 'red'
+
+plt.figure(figsize=(10,5))
+plt.bar(months, total_monthly_revenue, color=colors)
+plt.title("Best (Green) & Worst (Red) Month Highlight", fontsize=14, weight='bold')
+plt.xlabel("Months")
+plt.ylabel("Revenue (₹)")
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
